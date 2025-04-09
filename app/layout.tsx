@@ -29,7 +29,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider> {/* wrapping into client compoenent doesn't turn the entire app into client component */}
-        {children}
+        {children} {/* children is the content of the page */}
         </ThemeProvider>
       </body>
     </html>
