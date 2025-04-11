@@ -23,7 +23,7 @@ export default function ThemeToggle() { /* don't run on server since no access t
       size='sm'
       variant='ghost'
       onClick={() => {
-        setTheme(resolvedTheme === 'dark' ? 'light' : 'dark')
+        setTheme(resolvedTheme === 'dark' ? 'light' : 'dark') 
       }}
     >
       {resolvedTheme === 'dark' ? (
