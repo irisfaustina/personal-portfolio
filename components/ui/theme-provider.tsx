@@ -8,9 +8,12 @@ export function ThemeProvider({
   ...props
 }: React.ComponentProps<typeof NextThemesProvider>) {
   return (
-    <NextThemesProvider 
-  {...props}>
-        {children}
+    <NextThemesProvider
+    attribute="class" /* tells next-themes to use CSS classes for theme switching */
+    defaultTheme="system" /* sets the initial theme to match the system preference */
+    enableSystem /* allows the theme to follow the system preference as defined in toggle */
+    {...props}>
+      {children}
     </NextThemesProvider>
   )
 }

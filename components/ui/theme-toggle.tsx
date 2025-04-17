@@ -27,9 +27,9 @@ export default function ThemeToggle() { /* don't run on server since no access t
       }}
     >
       {resolvedTheme === 'dark' ? (
-        <SunIcon className='size-4 text-orange-300' />
+        <SunIcon className='size-4' />
       ) : (
-        <MoonIcon className='size-4 text-sky-950' />
+        <MoonIcon className='size-4' />
       )}
 
       <span className='sr-only'>Toggle theme</span>
