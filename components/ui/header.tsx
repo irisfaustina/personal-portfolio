@@ -6,10 +6,10 @@ import ThemeToggle from '@/components/ui/theme-toggle'
 export default function Header() {
   return (
     <header className='fixed inset-x-0 top-0 z-50 bg-background/75 py-6 backdrop-blur-sm'> {/* header components */}
-      <nav className='container flex max-w-3xl items-center justify-between'> {/* nav components */}
+      <nav className='container flex max-w-3xl items-center justify-between mx-auto px-4'> {/* nav components */}
         <div> {/* logo */}
-          <Link href='/' className='font-serif text-2xl font-bold'>
-            HB
+          <Link href='/' className='text-2xl font-bold'>
+            IL
           </Link>
         </div>
 

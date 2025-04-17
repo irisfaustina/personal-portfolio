@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/ui/theme-provider";
+import Header from "@/components/ui/header";
+import Footer from "@/components/ui/footer";
+import { cn } from "@/lib/utils";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,12 +27,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning> {/* mismatch between what we render between server v client render for users system preference, here's to ignore */}
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={cn( /* turn into flex column so the footer goes all the way down */
+          'flex min-h-screen flex-col font-sans antialiased',
+          `${geistSans.variable} ${geistMono.variable}`
+        )}
       >
         <ThemeProvider> {/* wrapping into client compoenent doesn't turn the entire app into client component */}
-        {children} {/* children is the content of the page */}
+          <Header />
+          <main className="grow">{children}</main> {/* like putting margin top auto on footer, to make space; children is the content of the page */}
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
