@@ -1,4 +1,4 @@
-//reads content from local file and passes to react
+/* reads content from local file and passes to react */
 import fs from 'fs';
 import matter from 'gray-matter'; /* Parse front-matter from a string or file. */
 import path from "path";
