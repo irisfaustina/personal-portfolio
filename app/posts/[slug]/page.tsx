@@ -7,6 +7,7 @@ import React from 'react'
 import { formatDate } from '@/lib/utils'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import type { MDXComponents } from 'mdx/types'
+import MDXContent from '@/components/mdx-content'
 
 type ComponentProps = {
   children: React.ReactNode
@@ -62,8 +63,8 @@ export default async function Post({ params }: { params: { slug: string } }) {
           </p>
         </header>
 
-        <main className='prose dark:prose-invert mt-16'>
-          <MDXRemote source={content} components={components} />
+        <main className='prose dark:prose-invert mt-12'> {/* edit in globals.css or overwrite, invert gives us light and dark theme  */}
+          <MDXContent source={content} components={components}/>
         </main>
       </div>
     </section>
