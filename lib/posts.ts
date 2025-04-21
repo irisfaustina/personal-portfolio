@@ -30,3 +30,31 @@ export async function getPostBySlug(slug: string): Promise< Post | null> { /* re
         return null
     }
 }
+
+export async function getPosts(limit?: number): Promise<PostMetadata[]> {
+    const files = fs.readdirSync(rootDir) /* read content of all root directory */
+  
+    const posts = files
+      .map(file => getPostMetadata(file)) /* call on that file */
+      .sort((a, b) => {
+        if (new Date(a.publishedAt ?? '') < new Date(b.publishedAt ?? '')) { /* sorting the post based on date */
+          return 1
+        } else {
+          return -1
+        }
+      })
+  
+    if (limit) {
+      return posts.slice(0, limit)
+    }
+  
+    return posts
+  }
+  
+  export function getPostMetadata(filepath: string): PostMetadata { /* get file, read front matter, return meta data */
+    const slug = filepath.replace(/\.mdx$/, '')
+    const filePath = path.join(rootDir, filepath)
+    const fileContent = fs.readFileSync(filePath, { encoding: 'utf8' })
+    const { data } = matter(fileContent)
+    return { ...data, slug }
+  }
