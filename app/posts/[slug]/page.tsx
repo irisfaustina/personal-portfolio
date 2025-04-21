@@ -1,3 +1,8 @@
+// The "slug" is a dynamic part of the URL (e.g., /posts/my-first-post) that corresponds to a specific MDX file. In a Next.js MDX blog, the slug enables dynamic routing and content fetching, allowing each MDX file to be rendered as its own page.
+// The [slug] part tells Next.js to treat any value in that URL segment as a parameter called slug
+// When a user visits /posts/my-first-post, Next.js extracts my-first-post as the slug.
+// This slug is accessible in your page component via params.slug
+
 import { getPostBySlug } from '@/lib/posts'
 import { ArrowLeftIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
@@ -5,22 +10,9 @@ import Image from 'next/image'
 import { notFound } from 'next/navigation'
 import React from 'react'
 import { formatDate } from '@/lib/utils'
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import type { MDXComponents } from 'mdx/types'
 import MDXContent from '@/components/mdx-content'
 
-type ComponentProps = {
-  children: React.ReactNode
-}
-
-const components: MDXComponents = {
-  h1: ({ children }: ComponentProps) => <h1 className="text-3xl font-bold mt-8 mb-6">{children}</h1>,
-  h2: ({ children }: ComponentProps) => <h2 className="text-2xl font-semibold mt-8 mb-6">{children}</h2>,
-  h3: ({ children }: ComponentProps) => <h3 className="text-xl font-medium mb-2">{children}</h3>,
-  p: ({ children }: ComponentProps) => <p className="mb-6">{children}</p>,
-  code: ({ children }: ComponentProps) => <code className="bg-gray-100 dark:bg-gray-800 rounded px-2 py-1">{children}</code>,
-  pre: ({ children }: ComponentProps) => <pre className="bg-gray-100 dark:bg-gray-800 rounded p-4 mb-4 overflow-x-auto">{children}</pre>,
-}
+//components set up is in mdx-content.tsx
 
 export default async function Post({ params }: { params: { slug: string } }) {
   /* receive params from next.js */
@@ -38,6 +30,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
     <section className='pt-32 pb-24'>
       <div className='container mx-auto max-w-3xl px-4'>
         <Link
+
           href='/posts'
           className='text-muted-foreground hover:text-foreground mb-8 inline-flex items-center gap-2 text-sm font-light transition-colors'
         >
@@ -64,7 +57,7 @@ export default async function Post({ params }: { params: { slug: string } }) {
         </header>
 
         <main className='prose dark:prose-invert mt-12'> {/* edit in globals.css or overwrite, invert gives us light and dark theme  */}
-          <MDXContent source={content} components={components}/>
+          <MDXContent source={content}/>
         </main>
       </div>
     </section>
