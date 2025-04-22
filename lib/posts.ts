@@ -3,7 +3,7 @@ import fs from 'fs';
 import matter from 'gray-matter'; /* Parse front-matter from a string or file. */
 import path from "path";
 
-const rootDir = path.join(process.cwd(), 'app','content', 'posts') /* content/posts */
+const rootDir = path.join(process.cwd(), 'content', 'posts') /* content/posts */
 
 export type Post ={ /* post contains metadata and content */
     metadata: PostMetadata
@@ -21,7 +21,7 @@ export type PostMetadata ={ /* front matter */
 
 export async function getPostBySlug(slug: string): Promise< Post | null> { /* return promise which is post or null */
     try {
-        const filePath = path.join(rootDir, `${slug}.mdx`) /* get file path, joining working dir with the same slug name in the dynamic route */
+        const filePath = path.join(rootDir, `${slug}`) /* get file path, joining working dir with the same slug name in the dynamic route */
         const fileContents = fs.readFileSync(filePath, 'utf-8')/* reads file content */
         const {data, content} = matter(fileContents) /* get front matter/meta data and content */
         return {metadata:{...data, slug}, content} /* return front matter in object format, add slug to know where to navigate or link to include, and content */
@@ -52,7 +52,7 @@ export async function getPosts(limit?: number): Promise<PostMetadata[]> {
   }
   
   export function getPostMetadata(filepath: string): PostMetadata { /* get file, read front matter, return meta data */
-    const slug = filepath.replace(/\.mdx$/, '')
+    const slug = filepath
     const filePath = path.join(rootDir, filepath)
     const fileContent = fs.readFileSync(filePath, { encoding: 'utf8' })
     const { data } = matter(fileContent)

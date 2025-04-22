@@ -3,7 +3,7 @@
 // When a user visits /posts/my-first-post, Next.js extracts my-first-post as the slug.
 // This slug is accessible in your page component via params.slug
 
-import { getPostBySlug } from '@/lib/posts'
+import { getPostBySlug, getPosts } from '@/lib/posts'
 import { ArrowLeftIcon } from '@radix-ui/react-icons'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -13,8 +13,12 @@ import { formatDate } from '@/lib/utils'
 import MDXContent from '@/components/mdx-content'
 
 //components set up is in mdx-content.tsx
+export async function generateStaticParams() { /* at build time, generate static params for dynamic routes, nextjs needs to know what slugs exist, equivalent to generateStaticPaths, to increase performance */
+  const posts = await getPosts() /* get posts from server */
+  return posts.map(post => ({ slug: post.slug })) /* return slugs, return dynamic values to static value from the array */
+}
 
-export default async function Post({ params }: { params: { slug: string } }) {
+export default async function Post({ params }: { params: { slug: string } }) { /* at runtime, dynamic*/
   /* receive params from next.js */
   const { slug } = await params
   const post = await getPostBySlug(slug)
