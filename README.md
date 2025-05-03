@@ -1,3 +1,5 @@
+<div align="center">
+
 # Personal Portfolio Website
 
 [![Next.js](https://img.shields.io/badge/Next.js-15.2-black?logo=next.js)](https://nextjs.org/)
@@ -8,6 +10,8 @@
 A modern, responsive personal portfolio website built with Next.js 14 and TypeScript. Features a clean design, dark mode support, blog functionality with MDX, and a contact form.
 
 [Features](#-features) • [Tech Stack](#️-tech-stack) • [Getting Started](#-getting-started) • [Project Structure](#-project-structure) • [Documentation](#-adding-content)
+
+</div>
 
 ## 🌟 Features
 
