@@ -20,7 +20,7 @@ export async function generateStaticParams() { /* at build time, generate static
 
 export default async function Post({ params }: { params: { slug: string } }) { /* at runtime, dynamic*/
   /* receive params from next.js */
-  const { slug } = await params
+  const { slug } = params
   const post = await getPostBySlug(slug)
 
   if (!post) {
@@ -28,7 +28,7 @@ export default async function Post({ params }: { params: { slug: string } }) { /
   }
 
   const { metadata, content } = post
-  const { title, summary, image, author, publishedAt } = metadata
+  const { title, image, author, publishedAt } = metadata
 
   return (
     <section className='pt-32 pb-24'>
