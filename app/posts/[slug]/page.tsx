@@ -20,7 +20,7 @@ export async function generateStaticParams() { /* at build time, generate static
 
 export default async function Post({ params }: { params: { slug: string } }) { /* at runtime, dynamic*/
   /* receive params from next.js */
-  const { slug } = await params
+  const { slug } = params
   const post = await getPostBySlug(slug)
 
   if (!post) {
