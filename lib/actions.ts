@@ -9,31 +9,27 @@ type ContactFormInputs = z.infer<typeof ContactFormSchema> /* define schema once
 type NewsletterFormInputs = z.infer<typeof NewsletterFormSchema>
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-export async function sendEmail(data: ContactFormInputs) {
-  const result = ContactFormSchema.safeParse(data) /* validate data coming from client side*/
+interface EmailData {
+  name: string
+  email: string
+  message: string
+}
 
-  if (result.error) { /* if data doesn't match the schema we need */
-    return { error: result.error.format() } /* return this object with error, anything return is returned to client */
-  }
-
+export async function sendEmail(formData: EmailData) {
   try {
-    const { name, email, message } = result.data
-    const { data, error } = await resend.emails.send({
+    const { name, email, message } = formData
+    await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: [email],
-      cc: ['liuirisny@gmail.com'],
+      to: ['liuirisny@gmail.com'],
+      replyTo: email,
       subject: 'Contact form submission',
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
-      react: await ContactFormEmail({ name, email, message }), /* react email component */
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
     })
-
-    if (!data || error) {
-      throw new Error('Failed to send email')
-    }
 
     return { success: true }
   } catch (error) {
-    return { error }
+    console.error('Email error:', error)
+    return { error: 'Failed to send email' }
   }
 }
 

@@ -3,40 +3,36 @@
 import { z } from 'zod'
 import Link from 'next/link'
 import { toast } from 'sonner'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { NewsletterFormSchema } from '@/lib/schemas'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-
-import { subscribe } from '@/lib/actions' /* subscribe action */
+import { subscribe } from '@/lib/actions'
 import { Card, CardContent } from '@/components/ui/card'
 
-type Inputs = z.infer<typeof NewsletterFormSchema> /* similar pattern as contact form */
-
 export default function NewsletterForm() {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting }
-  } = useForm<Inputs>({
-    resolver: zodResolver(NewsletterFormSchema),
-    defaultValues: {
-      email: ''
-    }
-  })
+  const [email, setEmail] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const processForm: SubmitHandler<Inputs> = async data => {
-    const result = await subscribe(data) /* resend broadcast to subscription newsletter */
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!email) return
 
-    if (result?.error) {
+    try {
+      setIsSubmitting(true)
+      const result = await subscribe({ email })
+
+      if (result?.error) {
+        toast.error('An error occurred! Please try again.')
+        return
+      }
+
+      toast.success('Subscribed successfully!')
+      setEmail('')
+    } catch (error) {
       toast.error('An error occurred! Please try again.')
-      return
+    } finally {
+      setIsSubmitting(false)
     }
-
-    toast.success('Subscribed successfully!')
-    reset()
   }
 
   return (
@@ -51,30 +47,26 @@ export default function NewsletterForm() {
           </div>
 
           <form
-            onSubmit={handleSubmit(processForm)} /* only have email */
+            onSubmit={handleSubmit}
             className='flex flex-col items-start gap-3'
           >
             <div className='w-full'>
               <Input
                 type='email'
                 id='email'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 autoComplete='email'
                 placeholder='Email'
                 className='w-full'
-                {...register('email')}
+                required
               />
-
-              {errors.email?.message && (
-                <p className='ml-1 mt-2 text-sm text-rose-400'>
-                  {errors.email.message}
-                </p>
-              )}
             </div>
 
             <div className='w-full'>
               <Button
                 type='submit'
-                disabled={isSubmitting}
+                disabled={isSubmitting || !email}
                 className='w-full disabled:opacity-50'
               >
                 {isSubmitting ? 'Submitting...' : 'Subscribe'}
