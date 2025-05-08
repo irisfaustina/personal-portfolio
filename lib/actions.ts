@@ -33,28 +33,17 @@ export async function sendEmail(formData: EmailData) {
   }
 }
 
-export async function subscribe(data: NewsletterFormInputs) { /* for newsletter subscription, repository for all subscribe server actions */
-  const result = NewsletterFormSchema.safeParse(data)
-
-  if (result.error) {
-    return { error: result.error.format() }
-  }
-
+export async function subscribe(data: NewsletterFormInputs) {
   try {
-    const { email } = result.data
-    const { data, error } = await resend.contacts.create({
-      email: email,
+    const { email } = data
+    await resend.contacts.create({
+      email,
       audienceId: process.env.RESEND_AUDIENCE_ID as string
     })
 
-    if (!data || error) {
-      throw new Error('Failed to subscribe')
-    }
-
-    // TODO: Send a welcome email
-
     return { success: true }
   } catch (error) {
-    return { error }
+    console.error('Newsletter error:', error)
+    return { error: 'Failed to subscribe to newsletter' }
   }
 }

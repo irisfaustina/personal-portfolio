@@ -22,14 +22,15 @@ export default function NewsletterForm() {
       const result = await subscribe({ email })
 
       if (result?.error) {
-        toast.error('An error occurred! Please try again.')
+        toast.error(result.error)
         return
       }
 
-      toast.success('Subscribed successfully!')
+      toast.success('Successfully subscribed to newsletter!')
       setEmail('')
     } catch (error) {
-      toast.error('An error occurred! Please try again.')
+      console.error('Newsletter form error:', error)
+      toast.error('Failed to subscribe. Please try again.')
     } finally {
       setIsSubmitting(false)
     }
