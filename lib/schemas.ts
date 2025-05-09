@@ -13,5 +13,5 @@ export const ContactFormSchema = z.object({ /* contact form schema */
 })
 
 export const NewsletterFormSchema = z.object({
-  email: z.string().email('Please enter a valid email address')
+  email: z.string()
 })
