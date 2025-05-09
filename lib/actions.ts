@@ -7,6 +7,14 @@ import { ContactFormEmail } from '@/email/contact-form-email'
 
 type ContactFormInputs = z.infer<typeof ContactFormSchema> /* define schema once infer multiple times from infer */
 type NewsletterFormInputs = z.infer<typeof NewsletterFormSchema>
+if (!process.env.RESEND_API_KEY) {
+  throw new Error('RESEND_API_KEY is not set')
+}
+
+if (!process.env.RESEND_AUDIENCE_ID) {
+  throw new Error('RESEND_AUDIENCE_ID is not set')
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY)
 
 interface EmailData {
@@ -36,14 +44,28 @@ export async function sendEmail(formData: EmailData) {
 export async function subscribe(data: NewsletterFormInputs) {
   try {
     const { email } = data
-    await resend.contacts.create({
+
+    if (!process.env.RESEND_AUDIENCE_ID) {
+      throw new Error('RESEND_AUDIENCE_ID is not set')
+    }
+
+    const response = await resend.contacts.create({
       email,
-      audienceId: process.env.RESEND_AUDIENCE_ID as string
+      audienceId: process.env.RESEND_AUDIENCE_ID
     })
+
+    if (!response.data || response.error) {
+      console.error('Resend API error:', response.error)
+      throw new Error(response.error?.message || 'Failed to subscribe')
+    }
 
     return { success: true }
   } catch (error) {
-    console.error('Newsletter error:', error)
-    return { error: 'Failed to subscribe to newsletter' }
+    console.error('Newsletter subscription error:', error)
+    return { 
+      error: process.env.NODE_ENV === 'development' 
+        ? `Failed to subscribe: ${error instanceof Error ? error.message : 'Unknown error'}` 
+        : 'Failed to subscribe to newsletter. Please try again.'
+    }
   }
 }
