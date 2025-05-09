@@ -7,58 +7,84 @@ import { ContactFormEmail } from '@/email/contact-form-email'
 
 type ContactFormInputs = z.infer<typeof ContactFormSchema> /* define schema once infer multiple times from infer */
 type NewsletterFormInputs = z.infer<typeof NewsletterFormSchema>
+if (!process.env.RESEND_API_KEY) {
+  throw new Error('RESEND_API_KEY is not set')
+}
+
+if (!process.env.RESEND_AUDIENCE_ID) {
+  throw new Error('RESEND_AUDIENCE_ID is not set')
+}
+
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-export async function sendEmail(data: ContactFormInputs) {
-  const result = ContactFormSchema.safeParse(data) /* validate data coming from client side*/
+interface EmailData {
+  name: string
+  email: string
+  message: string
+}
 
-  if (result.error) { /* if data doesn't match the schema we need */
-    return { error: result.error.format() } /* return this object with error, anything return is returned to client */
-  }
-
+export async function sendEmail(formData: EmailData) {
   try {
-    const { name, email, message } = result.data
-    const { data, error } = await resend.emails.send({
+    const { name, email, message } = formData
+    await resend.emails.send({
       from: 'onboarding@resend.dev',
-      to: [email],
-      cc: ['liuirisny@gmail.com'],
+      to: ['liuirisny@gmail.com'],
+      replyTo: email,
       subject: 'Contact form submission',
-      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`,
-      react: await ContactFormEmail({ name, email, message }), /* react email component */
+      text: `Name: ${name}\nEmail: ${email}\nMessage: ${message}`
     })
-
-    if (!data || error) {
-      throw new Error('Failed to send email')
-    }
 
     return { success: true }
   } catch (error) {
-    return { error }
+    console.error('Email error:', error)
+    return { error: 'Failed to send email' }
   }
 }
 
-export async function subscribe(data: NewsletterFormInputs) { /* for newsletter subscription, repository for all subscribe server actions */
-  const result = NewsletterFormSchema.safeParse(data)
-
-  if (result.error) {
-    return { error: result.error.format() }
-  }
-
+export async function subscribe(data: NewsletterFormInputs) {
   try {
-    const { email } = result.data
-    const { data, error } = await resend.contacts.create({
-      email: email,
-      audienceId: process.env.RESEND_AUDIENCE_ID as string
-    })
+    const { email } = data
 
-    if (!data || error) {
-      throw new Error('Failed to subscribe')
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is not set')
     }
 
-    // TODO: Send a welcome email
+    // Try sending email directly with fetch
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+      },
+      body: JSON.stringify({
+        from: 'Iris Liu <onboarding@resend.dev>',
+        to: [email],
+        subject: 'Welcome to my newsletter!',
+        text: 'Thank you for subscribing to my newsletter! I will keep you updated on my latest projects and blog posts.'
+      })
+    })
+
+    const result = await response.json()
+    console.log('Resend API response:', {
+      status: response.status,
+      result
+    })
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Failed to send email')
+    }
 
     return { success: true }
   } catch (error) {
-    return { error }
+    console.error('Newsletter error:', {
+      error,
+      message: error instanceof Error ? error.message : 'Unknown error'
+    })
+
+    return { 
+      error: process.env.NODE_ENV === 'development'
+        ? `Subscription failed: ${error instanceof Error ? error.message : 'Unknown error'}`
+        : 'Failed to subscribe to newsletter. Please try again.'
+    }
   }
 }

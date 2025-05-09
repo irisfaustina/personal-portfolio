@@ -1,44 +1,57 @@
 'use client'
 
-import { z } from 'zod'
 import Link from 'next/link'
 import { toast } from 'sonner'
-import { SubmitHandler, useForm } from 'react-hook-form' /* helps with form validation */
-import { zodResolver } from '@hookform/resolvers/zod'
-import { ContactFormSchema } from '@/lib/schemas'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { sendEmail } from '@/lib/actions'
-//import { sendEmail } from '@/lib/actions'
 
-type Inputs = z.infer<typeof ContactFormSchema>
+interface ContactFormData {
+  name: string
+  email: string
+  message: string
+}
 
 export default function ContactForm() {
-  const { 
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting }
-  } = useForm<Inputs>({ /* from react hookfroms we get use for hool */
-    resolver: zodResolver(ContactFormSchema), /* for validation we defined this in lib schema */
-    defaultValues: { /* pass in default values */
-      name: '',
-      email: '',
-      message: ''
-    }
+  const [formData, setFormData] = useState<ContactFormData>({
+    name: '',
+    email: '',
+    message: ''
   })
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const processForm: SubmitHandler<Inputs> = async data => { /* name field is inferred from contact form schema, use form hook, handle form submission */
-    const result = await sendEmail(data) /* actions from lib, server action passed to data */
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    if (!e.target) return
+    const { name, value } = e.target
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }))
+  }
 
-    if (result?.error) { /* if from server we get an error */
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!formData.name || !formData.email || !formData.message) return
+
+    try {
+      setIsSubmitting(true)
+      const result = await sendEmail(formData)
+
+      if (result?.error) {
+        toast.error('An error occurred! Please try again.')
+        return
+      }
+
+      toast.success('Message sent successfully!')
+      setFormData({ name: '', email: '', message: '' })
+    } catch (error) {
+      console.error('Contact form error:', error)
       toast.error('An error occurred! Please try again.')
-      return
+    } finally {
+      setIsSubmitting(false)
     }
-
-    toast.success('Message sent successfully!') /* if server doesn't return error, success */
-    reset()
   }
 
   return (
@@ -76,31 +89,25 @@ export default function ContactForm() {
           strokeWidth={0}
           fill='url(#83fd4e5a-9d52-42fc-97b6-718e5d7ee527)'
         />
-      </svg> {/* form background pattern */}
-
+      </svg>{' '}
+      {/* form background pattern */}
       {/* Form */}
       <div className='relative'>
-        <form
-          onSubmit={handleSubmit(processForm)} /* handle form submission from use form hook */
-          className='mt-16 lg:flex-auto'
-          noValidate
-        >
+        <form onSubmit={handleSubmit} className='mt-16 lg:flex-auto'>
           <div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
             {/* Name */}
             <div>
-              <Input 
+              <Input
                 id='name'
+                name='name'
                 type='text'
+                value={formData.name}
+                onChange={handleChange}
                 placeholder='Name'
                 autoComplete='given-name'
-                {...register('name')} /* register the input with react hook forms */
+                required
+                minLength={2}
               />
-
-              {errors.name?.message && ( /* if it exists */
-                <p className='ml-1 mt-2 text-sm text-rose-400'>
-                  {errors.name.message}
-                </p>
-              )}
             </div>
 
             {/* Email */}
@@ -108,40 +115,36 @@ export default function ContactForm() {
               <Input
                 type='email'
                 id='email'
+                name='email'
+                value={formData.email}
+                onChange={handleChange}
                 autoComplete='email'
                 placeholder='Email'
-                {...register('email')}
+                required
               />
-
-              {errors.email?.message && (
-                <p className='ml-1 mt-2 text-sm text-rose-400'>
-                  {errors.email.message}
-                </p>
-              )}
             </div>
 
             {/* Message */}
             <div className='sm:col-span-2'>
-              <Textarea /* success or error */
+              <Textarea
                 rows={4}
+                name='message'
+                value={formData.message}
+                onChange={handleChange}
                 placeholder='Message'
-                {...register('message')}
+                required
               />
-
-              {errors.message?.message && (
-                <p className='ml-1 mt-2 text-sm text-rose-400'>
-                  {errors.message.message}
-                </p>
-              )}
             </div>
           </div>
-          <div className='mt-6'> {/* button for submitting */}
+          <div className='mt-6'>
+            {' '}
+            {/* button for submitting */}
             <Button
               type='submit'
-              disabled={isSubmitting}
+              disabled={isSubmitting || !formData.name || !formData.email || !formData.message}
               className='w-full disabled:opacity-50'
             >
-              {isSubmitting ? 'Submitting...' : 'Contact Us'} {/* depending on loading state exposed from useform function */}
+              {isSubmitting ? 'Submitting...' : 'Contact Us'}
             </Button>
           </div>
           <p className='mt-4 text-xs text-muted-foreground'>
