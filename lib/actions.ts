@@ -49,26 +49,38 @@ export async function subscribe(data: NewsletterFormInputs) {
       throw new Error('RESEND_API_KEY is not set')
     }
 
-    if (!process.env.RESEND_AUDIENCE_ID) {
-      throw new Error('RESEND_AUDIENCE_ID is not set')
-    }
-
-    // Send a welcome email instead of using contacts API
-    const response = await resend.emails.send({
-      from: 'Iris Liu <onboarding@resend.dev>',
-      to: [email],
-      subject: 'Welcome to my newsletter!',
-      text: 'Thank you for subscribing to my newsletter! I will keep you updated on my latest projects and blog posts.',
+    // Try sending email directly with fetch
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+      },
+      body: JSON.stringify({
+        from: 'Iris Liu <onboarding@resend.dev>',
+        to: [email],
+        subject: 'Welcome to my newsletter!',
+        text: 'Thank you for subscribing to my newsletter! I will keep you updated on my latest projects and blog posts.'
+      })
     })
 
-    if (response.error) {
-      console.error('Resend API error:', response.error)
-      throw new Error(response.error.message)
+    const result = await response.json()
+    console.log('Resend API response:', {
+      status: response.status,
+      result
+    })
+
+    if (!response.ok) {
+      throw new Error(result.message || 'Failed to send email')
     }
 
     return { success: true }
   } catch (error) {
-    console.error('Newsletter error:', error)
+    console.error('Newsletter error:', {
+      error,
+      message: error instanceof Error ? error.message : 'Unknown error'
+    })
+
     return { 
       error: process.env.NODE_ENV === 'development'
         ? `Subscription failed: ${error instanceof Error ? error.message : 'Unknown error'}`
