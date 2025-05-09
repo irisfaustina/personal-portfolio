@@ -45,23 +45,52 @@ export async function subscribe(data: NewsletterFormInputs) {
   try {
     const { email } = data
 
+    // Log environment info
+    console.log('Environment:', {
+      NODE_ENV: process.env.NODE_ENV,
+      RESEND_API_KEY: process.env.RESEND_API_KEY ? 'Set' : 'Not set',
+      RESEND_AUDIENCE_ID: process.env.RESEND_AUDIENCE_ID ? 'Set' : 'Not set'
+    })
+
+    if (!process.env.RESEND_API_KEY) {
+      throw new Error('RESEND_API_KEY is not set')
+    }
+
     if (!process.env.RESEND_AUDIENCE_ID) {
       throw new Error('RESEND_AUDIENCE_ID is not set')
     }
+
+    // Log request
+    console.log('Subscribing email:', email)
 
     const response = await resend.contacts.create({
       email,
       audienceId: process.env.RESEND_AUDIENCE_ID
     })
 
-    if (!response.data || response.error) {
-      console.error('Resend API error:', response.error)
-      throw new Error(response.error?.message || 'Failed to subscribe')
+    // Log response
+    console.log('Resend API response:', {
+      data: response.data,
+      error: response.error
+    })
+
+    if (response.error) {
+      throw new Error(`Resend API error: ${response.error.message}`)
+    }
+
+    if (!response.data) {
+      throw new Error('No data returned from Resend API')
     }
 
     return { success: true }
   } catch (error) {
-    console.error('Newsletter subscription error:', error)
+    // Log detailed error
+    console.error('Newsletter subscription error:', {
+      error,
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    })
+
     return { 
       error: process.env.NODE_ENV === 'development' 
         ? `Failed to subscribe: ${error instanceof Error ? error.message : 'Unknown error'}` 
