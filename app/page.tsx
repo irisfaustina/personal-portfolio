@@ -10,8 +10,8 @@ export default function Home(){
     <section className="py-24">
       <div className="container max-w-3xl mx-auto px-4">
         <Intro />
-        <RecentProjects />
         <RecentPosts />
+        <RecentProjects />
         <NewsletterForm />
       </div>
     </section>
