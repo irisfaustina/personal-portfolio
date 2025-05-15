@@ -6,7 +6,7 @@ export default function PrivacyPolicy() {
       <h1 className="text-3xl font-bold mb-6">Privacy Policy</h1>
       
       <p className="mb-6">
-        Welcome to hamedbahram.io. We respect your privacy and are committed to protecting your personal information. 
+        Welcome to irisliu.co. We respect your privacy and are committed to protecting your personal information. 
         This policy outlines our practices concerning data collection, use, and security.
       </p>
 
