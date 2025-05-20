@@ -17,12 +17,6 @@ export default function PrivacyPolicy() {
         usage of our website.
       </p>
 
-      <h2 className="text-2xl font-semibold mb-4">How we use your information</h2>
-      <p className="mb-6">
-        We use your information to provide, improve, and personalize our services, communicate with you, 
-        understand user behavior, and for security purposes.
-      </p>
-
       <h2 className="text-2xl font-semibold mb-4">Data sharing</h2>
       <p className="mb-6">
         We do not share your personal information with third parties, except as necessary to provide our 
