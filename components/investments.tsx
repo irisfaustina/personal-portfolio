@@ -19,12 +19,12 @@ export default function Investments({
   investments: InvestmentMetadata[]
 }) {
   return (
-    <ul className='grid grid-cols-2 gap-4 sm:grid-cols-3'>
+    <ul className='grid grid-cols-2 gap-8 sm:grid-cols-3'>
       {investments.map(investment => (
         <li key={investment.url} className='group relative'>
           <Link href={investment.url} target='_blank' rel='noopener noreferrer'>
             {investment.image && (
-              <div className='aspect-square w-full max-w-[200px] mx-auto overflow-hidden bg-muted rounded-2xl'>
+              <div className='aspect-square w-full max-w-[160px] mx-auto overflow-hidden bg-muted rounded-2xl'>
                 <Image
                   src={investment.image}
                   alt={investment.title || ''}
