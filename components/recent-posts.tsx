@@ -3,7 +3,7 @@ import { getPosts } from '@/lib/posts'
 import Posts from '@/components/posts'
 
 export default async function RecentPosts() {
-  const posts = await getPosts(4) /* only need top 4 recent posts */
+  const posts = await getPosts(2) /* only need top 2 recent posts */
 
   return (
     <section className='pb-24'>
