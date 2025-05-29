@@ -3,6 +3,7 @@ import Intro from '@/components/intro';
 import RecentPosts from '@/components/recent-posts';
 import RecentProjects from '@/components/recent-projects';
 import NewsletterForm from '@/components/newsletter-form';
+import RecentInvestments from '@/components/recent-investments';
 
 export default function Home(){
   return (
@@ -12,6 +13,7 @@ export default function Home(){
         <Intro />
         <RecentPosts />
         <RecentProjects />
+        <RecentInvestments />
         <NewsletterForm />
       </div>
     </section>
