@@ -7,7 +7,7 @@
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind-4.0-38B2AC?logo=tailwind-css)](https://tailwindcss.com/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-A modern, responsive personal portfolio website built with Next.js 14 and TypeScript. Features a clean design, dark mode support, blog functionality with MDX, a newsletter subscription form, and a contact form...
+A modern, responsive personal portfolio website built with Next.js 14 and TypeScript. Features a clean design, dark mode support, blog functionality with MDX, a newsletter subscription form, and a contact form.
 
 [Features](#-features) • [Tech Stack](#️-tech-stack) • [Getting Started](#-getting-started) • [Project Structure](#-project-structure) • [Documentation](#-adding-content)
 
