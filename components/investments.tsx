@@ -24,7 +24,7 @@ export default function Investments({
         <li key={investment.url} className='group relative'>
           <Link href={investment.url} target='_blank' rel='noopener noreferrer'>
             {investment.image && (
-              <div className='aspect-square w-full max-w-[160px] mx-auto overflow-hidden bg-muted rounded-2xl'>
+              <div className='mx-auto aspect-square w-full max-w-[160px] overflow-hidden rounded-2xl bg-muted'>
                 <Image
                   src={investment.image}
                   alt={investment.title || ''}

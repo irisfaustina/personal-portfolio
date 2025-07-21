@@ -16,6 +16,13 @@ const investments: InvestmentMetadata[] = [
     publishedAt: '2024-11-30'
   },
   {
+    title: 'Canva',
+    summary: 'Series B investment in design and creative platform',
+    image: '/images/investments/canva.jpg',
+    url: 'https://canva.com',
+    publishedAt: '2024-11-20'
+  },
+  {
     title: 'Kyte',
     summary: 'Seed round investment in AI technology startup',
     image: '/images/investments/kyte.jpg',
