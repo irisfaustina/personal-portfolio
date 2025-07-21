@@ -3,7 +3,7 @@ import { getInvestments } from '@/lib/investments'
 import Investments from '@/components/investments'
 
 export default async function RecentInvestments() {
-  const investments = await getInvestments(4) /* only need top 4 recent investments */
+  const investments = await getInvestments(6) /* only need top 4 recent investments */
 
   return (
     <section className='pb-24'>
