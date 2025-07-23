@@ -1,64 +1,440 @@
 ---
-  title: Introduction to NextJs
-  summary: NextJs is a powerful React framework that makes it easy to build server-rendered React applications. This post will introduce you to the basics of NextJs.
-  image: 
-  author: 'Hamed Bahram'
-  publishedAt: '2024-08-10'
+  title: An Introduction to Ambient Agents
+  summary: This post will introduce you to the basics of ambient agents and their potential applications.
+  image: /images/posts/ambient-agents.png
+  author: 'Iris Liu'
+  publishedAt: '2025-07-21'
 ---
 
-NextJs is a powerful React framework that makes it easy to build server-rendered
-React applications. This post will introduce you to the basics of NextJs.
+# Ambient Agents: The Next Evolution in AI Systems
 
-## What is NextJs?
+## Introduction
 
-NextJs is a React framework that allows you to build server-rendered React
-applications with ease. It provides a number of features out of the box, such as
-server-side rendering, static site generation, and API routes, that make it easy
-to build fast and scalable React applications.
+The landscape of artificial intelligence is evolving beyond traditional chatbots and synchronous agents. Ambient agents are AI systems designed to run continuously and monitor for changes, events, or thresholds across a specific operational domain, representing a fundamental shift in how AI systems interact with their environment and users.
 
-```jsx
-export default function Home() {
-  return <h1>Hello, NextJs!</h1>
-}
+Unlike conventional AI applications that follow the familiar chat pattern, ambient agents are autonomous, event-driven AI systems that operate continuously in the background, without requiring direct human prompting. This new paradigm promises to transform enterprise automation and personal productivity by embedding intelligence directly into our digital workflows.
+
+## Understanding Ambient Agent Architecture
+
+### Core Components
+
+Ambient agents are built on several key architectural principles that distinguish them from traditional AI systems:
+
+#### 1. Event-Driven Operation
+They subscribe to event streams and are triggered whenever relevant events occur. Unlike chatbots, which wait for user queries, ambient agents react as soon as new data arrives. This proactive approach enables real-time responses to changing conditions.
+
+#### 2. Context Awareness
+Unlike traditional chatbots or AI assistants that start fresh with each interaction, ambient agents maintain ongoing awareness of their environment and previous actions. This persistent context allows for more intelligent and nuanced decision-making.
+
+#### 3. Governed Autonomy
+The architectural elements—context awareness, event-driven operation, governed autonomy, and human-in-the-loop controls—form the blueprint of any capable ambient agent. Agents operate within defined boundaries while maintaining the ability to take autonomous actions.
+
+#### 4. Ambient Functions
+At their core, they use "ambient functions" - specialized operations that automatically trigger in response to specific conditions or state changes. These functions enable seamless integration with existing systems and workflows.
+
+### Architecture Diagram
+
+```mermaid
+graph TB
+    A[Event Sources] --> B[Event Stream]
+    B --> C[Ambient Agent Core]
+    C --> D[Context Manager]
+    C --> E[Decision Engine]
+    C --> F[Action Executor]
+    D --> G[Memory Store]
+    E --> H[Rule Engine]
+    E --> I[ML Models]
+    F --> J[External Systems]
+    F --> K[Notifications]
+    K --> L[Human Oversight]
+    
+    subgraph "Ambient Agent Framework"
+        C
+        D
+        E
+        F
+    end
+    
+    subgraph "External Integration"
+        A
+        J
+        L
+    end
 ```
 
-## Why use NextJs?
+## Basic Functions of Ambient Agent Framework
 
-NextJs is a great choice for building server-rendered React applications because
-it provides a number of features that make it easy to build fast and scalable
-applications. Some of the key features of NextJs include:
+### 1. Continuous Monitoring
+Ambient agents continuously observe their environment, monitoring data streams, system states, and user behaviors without explicit prompts. This passive surveillance enables proactive responses to changing conditions.
 
-- Server-side rendering: NextJs allows you to render your React components on
-  the server, which can improve performance and SEO.
-- Static site generation: NextJs can generate static HTML files for your pages
-  at build time, which can improve performance and reduce hosting costs.
-- API routes: NextJs allows you to create API routes that can be used to fetch
-  data from external APIs or perform server-side logic.
+### 2. Event Processing
+The framework processes incoming events through sophisticated filtering and prioritization mechanisms, ensuring that only relevant events trigger agent responses.
 
-## How to use NextJs
+### 3. Context Maintenance
+Unlike stateless systems, ambient agents maintain rich contextual information across interactions, enabling more intelligent and personalized responses.
 
-To use NextJs, you need to create a new NextJs project by running the following
-command:
+### 4. Autonomous Decision Making
+Based on predefined rules, learned patterns, and contextual information, ambient agents make autonomous decisions within their operational boundaries.
 
-```bash
-npx create-next-app my-app
+### 5. Action Execution
+Agents can perform actions across multiple systems, from sending notifications to updating databases or triggering complex workflows.
+
+## Code Examples
+
+### Basic Ambient Agent Implementation
+
+Here's a simplified example of an ambient agent framework using Python:
+
+```python
+import asyncio
+from typing import Dict, Any, Callable
+from abc import ABC, abstractmethod
+
+class Event:
+    def __init__(self, event_type: str, data: Dict[str, Any], timestamp: float):
+        self.event_type = event_type
+        self.data = data
+        self.timestamp = timestamp
+
+class AmbientFunction(ABC):
+    @abstractmethod
+    async def should_trigger(self, event: Event, context: Dict[str, Any]) -> bool:
+        pass
+    
+    @abstractmethod
+    async def execute(self, event: Event, context: Dict[str, Any]) -> Any:
+        pass
+
+class EmailMonitorFunction(AmbientFunction):
+    def __init__(self, priority_keywords: list):
+        self.priority_keywords = priority_keywords
+    
+    async def should_trigger(self, event: Event, context: Dict[str, Any]) -> bool:
+        if event.event_type == "email_received":
+            email_content = event.data.get("content", "").lower()
+            return any(keyword in email_content for keyword in self.priority_keywords)
+        return False
+    
+    async def execute(self, event: Event, context: Dict[str, Any]) -> Any:
+        # Process high-priority email
+        sender = event.data.get("sender")
+        subject = event.data.get("subject")
+        
+        # Update context with email information
+        context["last_priority_email"] = {
+            "sender": sender,
+            "subject": subject,
+            "timestamp": event.timestamp
+        }
+        
+        # Trigger notification
+        return {
+            "action": "notify_user",
+            "message": f"High priority email from {sender}: {subject}"
+        }
+
+class AmbientAgent:
+    def __init__(self):
+        self.functions: list[AmbientFunction] = []
+        self.context: Dict[str, Any] = {}
+        self.event_queue = asyncio.Queue()
+        self.running = False
+    
+    def add_function(self, function: AmbientFunction):
+        self.functions.append(function)
+    
+    async def process_event(self, event: Event):
+        for function in self.functions:
+            if await function.should_trigger(event, self.context):
+                result = await function.execute(event, self.context)
+                if result:
+                    await self.handle_action(result)
+    
+    async def handle_action(self, action_result: Dict[str, Any]):
+        action_type = action_result.get("action")
+        if action_type == "notify_user":
+            print(f"📧 Notification: {action_result.get('message')}")
+    
+    async def start(self):
+        self.running = True
+        while self.running:
+            try:
+                event = await asyncio.wait_for(self.event_queue.get(), timeout=1.0)
+                await self.process_event(event)
+            except asyncio.TimeoutError:
+                continue  # Keep running even if no events
+    
+    async def add_event(self, event: Event):
+        await self.event_queue.put(event)
+    
+    def stop(self):
+        self.running = False
+
+# Usage example
+async def main():
+    agent = AmbientAgent()
+    
+    # Add email monitoring function
+    email_monitor = EmailMonitorFunction(["urgent", "critical", "asap"])
+    agent.add_function(email_monitor)
+    
+    # Start agent in background
+    agent_task = asyncio.create_task(agent.start())
+    
+    # Simulate incoming events
+    urgent_email = Event("email_received", {
+        "sender": "boss@company.com",
+        "subject": "Urgent: Server Down",
+        "content": "We have an urgent server issue that needs immediate attention."
+    }, asyncio.get_event_loop().time())
+    
+    await agent.add_event(urgent_email)
+    
+    # Let the agent process for a few seconds
+    await asyncio.sleep(2)
+    
+    agent.stop()
+    await agent_task
+
+# Run the example
+# asyncio.run(main())
 ```
 
-This will create a new NextJs project in a directory called `my-app`. You can
-then navigate to the project directory and start the development server by
-running the following command:
+### LangGraph-based Ambient Agent
 
-```bash
-cd my-app
-npm run dev
+Here's an example using LangGraph for building more sophisticated ambient agents:
+
+```python
+from langgraph import StateGraph, END
+from typing import TypedDict, List
+import asyncio
+
+class AgentState(TypedDict):
+    events: List[dict]
+    context: dict
+    actions: List[dict]
+    should_continue: bool
+
+def event_processor(state: AgentState) -> AgentState:
+    """Process incoming events and update context"""
+    new_events = []
+    for event in state["events"]:
+        if event["type"] == "calendar_update":
+            # Update context with calendar information
+            state["context"]["next_meeting"] = event["data"]
+        elif event["type"] == "email_received":
+            # Process email events
+            if "urgent" in event["data"].get("subject", "").lower():
+                state["actions"].append({
+                    "type": "notify",
+                    "message": f"Urgent email: {event['data']['subject']}"
+                })
+        new_events.append(event)
+    
+    state["events"] = new_events
+    return state
+
+def action_executor(state: AgentState) -> AgentState:
+    """Execute pending actions"""
+    for action in state["actions"]:
+        if action["type"] == "notify":
+            print(f"🔔 {action['message']}")
+        elif action["type"] == "schedule_reminder":
+            print(f"⏰ Reminder: {action['message']}")
+    
+    # Clear executed actions
+    state["actions"] = []
+    return state
+
+def should_continue(state: AgentState) -> str:
+    """Determine if the agent should continue processing"""
+    return "process" if state["should_continue"] else END
+
+# Build the ambient agent graph
+workflow = StateGraph(AgentState)
+workflow.add_node("event_processor", event_processor)
+workflow.add_node("action_executor", action_executor)
+
+workflow.set_entry_point("event_processor")
+workflow.add_edge("event_processor", "action_executor")
+workflow.add_conditional_edges(
+    "action_executor",
+    should_continue,
+    {
+        "process": "event_processor",
+        END: END
+    }
+)
+
+ambient_agent = workflow.compile()
 ```
 
-This will start the development server and open your NextJs application in your
-browser. You can then start building your application by creating new pages,
-components, and API routes.
+## Use Cases and Applications
+
+### 1. Email Management Assistant
+An ambient agent can monitor your email continuously, automatically categorizing messages, flagging urgent communications, and even drafting preliminary responses for routine inquiries.
+
+**Example Scenario**: The agent detects an email from a key client containing the word "urgent." It immediately notifies you via Slack, creates a calendar reminder, and prepares a draft response acknowledging receipt.
+
+### 2. System Health Monitoring
+Specialized ambient agents will activate, analyze the orchestrator's input, and engage other agents and back-end systems to gather whatever data is needed to reason, respond, and take action.
+
+**Example Scenario**: An ambient agent monitors server metrics continuously. When CPU usage exceeds 85% for more than 5 minutes, it automatically scales resources, notifies the DevOps team, and logs the incident.
+
+### 3. Customer Service Optimization
+Ambient agents can monitor customer interactions across multiple channels, identifying patterns and proactively addressing issues before they escalate.
+
+**Example Scenario**: The agent detects multiple customer complaints about a specific product feature on social media and automatically creates support tickets, notifies product managers, and suggests knowledge base updates.
+
+### 4. Personal Productivity Assistant
+These agents can observe your work patterns and proactively suggest optimizations, schedule breaks, and manage your digital workspace.
+
+**Example Scenario**: The agent notices you've been in back-to-back meetings for 3 hours and automatically books a 15-minute break in your calendar while suggesting a brief walk reminder.
+
+### 5. Financial Monitoring and Alerts
+Ambient agents can continuously monitor financial accounts, market conditions, and spending patterns to provide real-time insights and alerts.
+
+**Example Scenario**: The agent detects unusual spending patterns and market volatility affecting your portfolio, automatically rebalancing investments within predefined risk parameters and notifying you of significant changes.
+
+## Comparison: Ambient Agents vs Traditional Systems
+
+### Traditional Chatbots
+
+| Aspect | Traditional Chatbots | Ambient Agents |
+|--------|---------------------|----------------|
+| **Interaction Model** | Reactive - waits for user input | Proactive - monitors and acts independently |
+| **Context Awareness** | Limited to current conversation | Maintains persistent, rich context |
+| **Processing Model** | Synchronous request-response | Asynchronous event-driven |
+| **Scope of Operation** | Single conversation thread | Multi-system, multi-context environment |
+| **User Overhead** | High - requires explicit interaction | Low - operates transparently |
+
+**Traditional Chatbot Limitations:**
+- This "chat UX" creates unnecessary interaction overhead, limits our ability to scale ourselves, and fails to use the full potential of LLMs
+- Limited to reactive responses
+- No persistent memory between sessions
+- Cannot proactively identify opportunities or issues
+
+### Synchronous Agents
+
+| Aspect | Synchronous Agents | Ambient Agents |
+|--------|-------------------|----------------|
+| **Execution Model** | Sequential, blocking operations | Concurrent, non-blocking operations |
+| **Resource Utilization** | High during active use, idle otherwise | Optimized continuous operation |
+| **Response Time** | Immediate but limited by processing time | Variable but optimized for relevance |
+| **Scalability** | Limited by concurrent user capacity | Scales with event volume and processing capacity |
+| **Use Case Fit** | Task-specific, immediate responses | Continuous monitoring and optimization |
+
+**Key Advantages of Ambient Agents:**
+
+1. **Reduced Cognitive Load**: Users don't need to remember to check systems or initiate interactions
+2. **Continuous Optimization**: Always working to improve efficiency and outcomes
+3. **Proactive Problem Solving**: Identifies and addresses issues before they become critical
+4. **Contextual Intelligence**: Maintains awareness across multiple systems and timeframes
+5. **Scalable Automation**: Can manage multiple parallel processes without user intervention
+
+### Architectural Comparison Diagram
+
+```mermaid
+graph LR
+    subgraph "Traditional Chatbot"
+        A1[User Input] --> B1[Processing Engine]
+        B1 --> C1[Response Generation]
+        C1 --> D1[User Output]
+        D1 --> A1
+    end
+    
+    subgraph "Synchronous Agent"
+        A2[Task Request] --> B2[Task Processing]
+        B2 --> C2[Action Execution]
+        C2 --> D2[Result Return]
+    end
+    
+    subgraph "Ambient Agent"
+        A3[Event Streams] --> B3[Continuous Monitoring]
+        B3 --> C3[Context Analysis]
+        C3 --> D3[Autonomous Actions]
+        D3 --> E3[Environment Updates]
+        E3 --> B3
+        D3 --> F3[User Notifications]
+    end
+```
+
+## Implementation Considerations
+
+### Technical Requirements
+
+1. **Event Stream Processing**: Robust infrastructure for handling high-volume event streams
+2. **State Management**: Persistent context storage and retrieval mechanisms  
+3. **Security and Governance**: Fine-grained permission controls and audit trails
+4. **Monitoring and Observability**: Comprehensive logging and performance metrics
+5. **Scalability**: Ability to handle increasing event volumes and complexity
+
+### Best Practices
+
+1. **Start Small**: Begin with simple use cases and gradually increase complexity
+2. **Define Clear Boundaries**: Establish explicit operational limits and escalation protocols  
+3. **Implement Human Oversight**: Maintain human-in-the-loop controls for critical decisions
+4. **Monitor Performance**: Continuously evaluate agent effectiveness and user satisfaction
+5. **Iterate Based on Feedback**: Regularly update agent behavior based on real-world performance
+
+### Evaluation Framework
+
+```python
+class AmbientAgentEvaluator:
+    def __init__(self):
+        self.metrics = {
+            "response_time": [],
+            "accuracy": [],
+            "user_satisfaction": [],
+            "false_positive_rate": [],
+            "system_efficiency": []
+        }
+    
+    def evaluate_response_time(self, event_timestamp, action_timestamp):
+        """Measure time between event detection and action execution"""
+        response_time = action_timestamp - event_timestamp
+        self.metrics["response_time"].append(response_time)
+        return response_time
+    
+    def evaluate_accuracy(self, expected_action, actual_action):
+        """Assess correctness of agent actions"""
+        accuracy = 1.0 if expected_action == actual_action else 0.0
+        self.metrics["accuracy"].append(accuracy)
+        return accuracy
+    
+    def generate_report(self):
+        """Generate comprehensive evaluation report"""
+        report = {}
+        for metric, values in self.metrics.items():
+            if values:
+                report[metric] = {
+                    "average": sum(values) / len(values),
+                    "count": len(values),
+                    "min": min(values),
+                    "max": max(values)
+                }
+        return report
+```
+
+## Future Implications
+
+They enable a self-regulating enterprise where agents don't just execute—they sense and adapt. The evolution toward ambient intelligence represents a fundamental shift in how we interact with technology, moving from explicit command-and-control interfaces to implicit, context-aware assistance.
+
+As these systems mature, we can expect to see:
+
+1. **Ubiquitous Intelligence**: AI assistance embedded seamlessly into every digital workflow
+2. **Predictive Automation**: Systems that anticipate needs before they arise
+3. **Adaptive Organizations**: Enterprises that continuously optimize themselves through ambient intelligence
+4. **Enhanced Human Capability**: Individuals empowered by invisible AI assistance that amplifies their effectiveness
 
 ## Conclusion
 
-NextJs is a powerful React framework that makes it easy to build server-rendered
-React applications. This post has introduced you to the basics of NextJs and
-explained why you might want to use it in your projects.
+Ambient agents represent a paradigm shift from reactive AI systems to proactive, context-aware intelligence that operates continuously in our digital environments. By moving beyond the limitations of traditional chatbots and synchronous agents, these systems promise to reduce cognitive overhead, improve decision-making, and enable new levels of automation and efficiency.
+
+The success of ambient agent implementations will depend on thoughtful design, robust governance, and careful attention to user experience. As organizations begin to adopt these systems, the focus should be on starting with clear use cases, establishing proper oversight mechanisms, and continuously iterating based on real-world performance.
+
+The future of AI assistance is ambient – invisible, intelligent, and always working to make our digital lives more productive and meaningful. By understanding the fundamentals of ambient agent frameworks, organizations can begin preparing for this transformation and positioning themselves to benefit from the next generation of AI-powered automation.
+
+---
+
+*This blog post explores the emerging field of ambient agents based on recent developments in agentic AI architectures. As this technology continues to evolve rapidly, implementations and best practices will likely advance significantly in the coming months.*

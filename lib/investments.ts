@@ -4,21 +4,21 @@ const investments: InvestmentMetadata[] = [
   {
     title: 'Anthropic',
     summary: 'Early-stage investment in AI technology startup',
-    image: '/images/investments/anthropic.jpg',
+    image: '/images/investments/anthropic.png',
     url: 'https://anthropic.com',
     publishedAt: '2025-01-15'
   },
   {
     title: 'Shield AI',
     summary: 'Series B investment in sustainable energy solutions',
-    image: '/images/investments/shieldai.jpg',
+    image: '/images/investments/shield.jpg',
     url: 'https://shield.ai',
     publishedAt: '2024-11-30'
   },
   {
     title: 'Canva',
     summary: 'Series B investment in design and creative platform',
-    image: '/images/investments/canva.jpg',
+    image: '/images/investments/canva.png',
     url: 'https://canva.com',
     publishedAt: '2024-11-20'
   },
@@ -32,7 +32,7 @@ const investments: InvestmentMetadata[] = [
   {
     title: 'Greenlit',
     summary: 'Seed round investment in AI technology startup',
-    image: '/images/investments/greenlit.jpg',
+    image: '/images/investments/greenlit.png',
     url: 'https://getgreenlit.xyz/',
     publishedAt: '2024-06-20'
   }
