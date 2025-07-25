@@ -46,7 +46,7 @@ export default function Intro() {
         <h1 className='title no-underline'>Welcome to my lab.</h1>{' '}
         {/* add titleto global css */}
         <p className='mt-3 font-light text-muted-foreground'>
-          <span className='font-bold'>I&#39;m Iris Liu</span>, a <span className='font-bold'>founder</span> and <span className='font-bold'>angel investor</span> based in NYC. Lately,
+        I&#39;m <span className='font-bold'>Iris Liu</span>, a <span className='font-bold'>founder</span> and <span className='font-bold'>angel investor</span> based in NYC. Lately,
           I've been tinkering with new ideas around AI agents and dev tools. I
           made this site to share my latest thoughts, past projects, and
           selected angel investment portfolio. Have questions? Drop me a line on
