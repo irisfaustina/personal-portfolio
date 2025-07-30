@@ -1,0 +1,51 @@
+---
+  title: Building modular AI workflows with LangGraph
+  summary: LangGraph is an open-source Python framework designed for building advanced, modular AI workflows—especially for LLM (Large Language Model) applications. If you're tired of monolithic pipelines or inflexible code, LangGraph brings the power of computational graphs—**states, nodes, and edges**—to natural language processing and generative AI development.
+  author: 'Iris Liu'
+  publishedAt: '2025-05-18'
+---
+
+# LangGraph: Building Modular AI Workflows with States, Nodes, and Edges
+
+LangGraph is an open-source Python framework designed for building advanced, modular AI workflows—especially for LLM (Large Language Model) applications. If you're tired of monolithic pipelines or inflexible code, LangGraph brings the power of computational graphs—**states, nodes, and edges**—to natural language processing and generative AI development.
+
+## Key Concepts
+
+### 1. State
+
+- The **state** in LangGraph represents the shared data and context that flows through the entire workflow.
+- Think of it as a “working memory”—the persistent information that every part of your graph can read or modify.
+- States can include anything: user input, conversation history, partial results, and more.
+
+### 2. Nodes
+
+- **Nodes** are the basic computational units of your workflow.
+- Each node performs a specific function—calling an LLM, evaluating code, fetching documents, querying a database, etc.
+- Nodes consume state, perform their work, and may update the
+
+### 3. Edges
+
+- **Edges** dictate the flow of execution.
+- Edges determine what node runs next based on the current state or node outputs.
+- Think of edges as the conditional logic (“if/then” pathways) that drive state and data through your graph.
+
+## How They Interact: Building a Workflow
+
+A LangGraph workflow starts with an initial state and a starting node. Here's how the pieces come together:
+
+1. **Initialization:** The graph is given an initial state (e.g., user prompt).
+2. **Node Processing:** The current node acts on the state:
+   - For instance, the node could send the user prompt to an LLM and attach its answer to the state.
+3. **Edge Evaluation:** The graph checks its edges to see what to do next.
+   - Edges can use logic: “If the LLM output is a question, go to the knowledge node; if it's a statement, go to the summary node.”
+4. **State Updates and Iteration:** The next node operates on the updated state.
+5. **Termination:** The workflow continues along edges from node to node, updating state, until a terminal node is reached.
+
+## Why Is This Powerful?
+
+- **Reusability:** Nodes are modular and can be recombined for different workflows.
+- **Flexibility:** You can introduce branching logic, loops, error handling—anything a graph permits.
+- **Transparency:** The state object provides full context at every step, so you always know what's happening.
+
+**In summary:**  
+LangGraph treats LLM chains as dynamic, stateful graphs—you define nodes to process data, edges to direct flow, and a state that accumulates context, making it easy to build non-linear, powerful, and maintainable AI workflows.
