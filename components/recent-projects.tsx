@@ -3,7 +3,7 @@ import { getProjects } from '@/lib/projects'
 import Projects from '@/components/projects'
 
 export default async function RecentProjects() {
-  const projects = await getProjects(2) /* only need top 2 recent projects */
+  const projects = await getProjects(4) /* only need top 2 recent projects */
 
   return (
     <section className='pb-24'>

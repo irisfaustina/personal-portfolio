@@ -1,9 +1,8 @@
 ---
-  title: An Introduction to Ambient Agents
+  title: An exploration of ambient agents
   summary: This post will introduce you to the basics of ambient agents and their potential applications.
-  image: /images/posts/ambient-agents.png
   author: 'Iris Liu'
-  publishedAt: '2025-07-21'
+  publishedAt: '2025-06-12'
 ---
 
 # Ambient Agents: The Next Evolution in AI Systems
@@ -200,75 +199,6 @@ async def main():
 # asyncio.run(main())
 ```
 
-### LangGraph-based Ambient Agent
-
-Here's an example using LangGraph for building more sophisticated ambient agents:
-
-```python
-from langgraph import StateGraph, END
-from typing import TypedDict, List
-import asyncio
-
-class AgentState(TypedDict):
-    events: List[dict]
-    context: dict
-    actions: List[dict]
-    should_continue: bool
-
-def event_processor(state: AgentState) -> AgentState:
-    """Process incoming events and update context"""
-    new_events = []
-    for event in state["events"]:
-        if event["type"] == "calendar_update":
-            # Update context with calendar information
-            state["context"]["next_meeting"] = event["data"]
-        elif event["type"] == "email_received":
-            # Process email events
-            if "urgent" in event["data"].get("subject", "").lower():
-                state["actions"].append({
-                    "type": "notify",
-                    "message": f"Urgent email: {event['data']['subject']}"
-                })
-        new_events.append(event)
-    
-    state["events"] = new_events
-    return state
-
-def action_executor(state: AgentState) -> AgentState:
-    """Execute pending actions"""
-    for action in state["actions"]:
-        if action["type"] == "notify":
-            print(f"🔔 {action['message']}")
-        elif action["type"] == "schedule_reminder":
-            print(f"⏰ Reminder: {action['message']}")
-    
-    # Clear executed actions
-    state["actions"] = []
-    return state
-
-def should_continue(state: AgentState) -> str:
-    """Determine if the agent should continue processing"""
-    return "process" if state["should_continue"] else END
-
-# Build the ambient agent graph
-workflow = StateGraph(AgentState)
-workflow.add_node("event_processor", event_processor)
-workflow.add_node("action_executor", action_executor)
-
-workflow.set_entry_point("event_processor")
-workflow.add_edge("event_processor", "action_executor")
-workflow.add_conditional_edges(
-    "action_executor",
-    should_continue,
-    {
-        "process": "event_processor",
-        END: END
-    }
-)
-
-ambient_agent = workflow.compile()
-```
-
 ## Use Cases and Applications
 
 ### 1. Email Management Assistant
@@ -296,86 +226,6 @@ Ambient agents can continuously monitor financial accounts, market conditions, a
 
 **Example Scenario**: The agent detects unusual spending patterns and market volatility affecting your portfolio, automatically rebalancing investments within predefined risk parameters and notifying you of significant changes.
 
-## Comparison: Ambient Agents vs Traditional Systems
-
-### Traditional Chatbots
-
-| Aspect | Traditional Chatbots | Ambient Agents |
-|--------|---------------------|----------------|
-| **Interaction Model** | Reactive - waits for user input | Proactive - monitors and acts independently |
-| **Context Awareness** | Limited to current conversation | Maintains persistent, rich context |
-| **Processing Model** | Synchronous request-response | Asynchronous event-driven |
-| **Scope of Operation** | Single conversation thread | Multi-system, multi-context environment |
-| **User Overhead** | High - requires explicit interaction | Low - operates transparently |
-
-**Traditional Chatbot Limitations:**
-- This "chat UX" creates unnecessary interaction overhead, limits our ability to scale ourselves, and fails to use the full potential of LLMs
-- Limited to reactive responses
-- No persistent memory between sessions
-- Cannot proactively identify opportunities or issues
-
-### Synchronous Agents
-
-| Aspect | Synchronous Agents | Ambient Agents |
-|--------|-------------------|----------------|
-| **Execution Model** | Sequential, blocking operations | Concurrent, non-blocking operations |
-| **Resource Utilization** | High during active use, idle otherwise | Optimized continuous operation |
-| **Response Time** | Immediate but limited by processing time | Variable but optimized for relevance |
-| **Scalability** | Limited by concurrent user capacity | Scales with event volume and processing capacity |
-| **Use Case Fit** | Task-specific, immediate responses | Continuous monitoring and optimization |
-
-**Key Advantages of Ambient Agents:**
-
-1. **Reduced Cognitive Load**: Users don't need to remember to check systems or initiate interactions
-2. **Continuous Optimization**: Always working to improve efficiency and outcomes
-3. **Proactive Problem Solving**: Identifies and addresses issues before they become critical
-4. **Contextual Intelligence**: Maintains awareness across multiple systems and timeframes
-5. **Scalable Automation**: Can manage multiple parallel processes without user intervention
-
-### Architectural Comparison Diagram
-
-```mermaid
-graph LR
-    subgraph "Traditional Chatbot"
-        A1[User Input] --> B1[Processing Engine]
-        B1 --> C1[Response Generation]
-        C1 --> D1[User Output]
-        D1 --> A1
-    end
-    
-    subgraph "Synchronous Agent"
-        A2[Task Request] --> B2[Task Processing]
-        B2 --> C2[Action Execution]
-        C2 --> D2[Result Return]
-    end
-    
-    subgraph "Ambient Agent"
-        A3[Event Streams] --> B3[Continuous Monitoring]
-        B3 --> C3[Context Analysis]
-        C3 --> D3[Autonomous Actions]
-        D3 --> E3[Environment Updates]
-        E3 --> B3
-        D3 --> F3[User Notifications]
-    end
-```
-
-## Implementation Considerations
-
-### Technical Requirements
-
-1. **Event Stream Processing**: Robust infrastructure for handling high-volume event streams
-2. **State Management**: Persistent context storage and retrieval mechanisms  
-3. **Security and Governance**: Fine-grained permission controls and audit trails
-4. **Monitoring and Observability**: Comprehensive logging and performance metrics
-5. **Scalability**: Ability to handle increasing event volumes and complexity
-
-### Best Practices
-
-1. **Start Small**: Begin with simple use cases and gradually increase complexity
-2. **Define Clear Boundaries**: Establish explicit operational limits and escalation protocols  
-3. **Implement Human Oversight**: Maintain human-in-the-loop controls for critical decisions
-4. **Monitor Performance**: Continuously evaluate agent effectiveness and user satisfaction
-5. **Iterate Based on Feedback**: Regularly update agent behavior based on real-world performance
 
 ### Evaluation Framework
 
@@ -416,24 +266,11 @@ class AmbientAgentEvaluator:
         return report
 ```
 
-## Future Implications
-
-They enable a self-regulating enterprise where agents don't just execute—they sense and adapt. The evolution toward ambient intelligence represents a fundamental shift in how we interact with technology, moving from explicit command-and-control interfaces to implicit, context-aware assistance.
-
-As these systems mature, we can expect to see:
-
-1. **Ubiquitous Intelligence**: AI assistance embedded seamlessly into every digital workflow
-2. **Predictive Automation**: Systems that anticipate needs before they arise
-3. **Adaptive Organizations**: Enterprises that continuously optimize themselves through ambient intelligence
-4. **Enhanced Human Capability**: Individuals empowered by invisible AI assistance that amplifies their effectiveness
 
 ## Conclusion
 
 Ambient agents represent a paradigm shift from reactive AI systems to proactive, context-aware intelligence that operates continuously in our digital environments. By moving beyond the limitations of traditional chatbots and synchronous agents, these systems promise to reduce cognitive overhead, improve decision-making, and enable new levels of automation and efficiency.
 
-The success of ambient agent implementations will depend on thoughtful design, robust governance, and careful attention to user experience. As organizations begin to adopt these systems, the focus should be on starting with clear use cases, establishing proper oversight mechanisms, and continuously iterating based on real-world performance.
-
-The future of AI assistance is ambient – invisible, intelligent, and always working to make our digital lives more productive and meaningful. By understanding the fundamentals of ambient agent frameworks, organizations can begin preparing for this transformation and positioning themselves to benefit from the next generation of AI-powered automation.
 
 ---
 

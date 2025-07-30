@@ -1,0 +1,130 @@
+---
+  title: Vibecoder Job Description Generator
+  summary: An interactive job description generation application that allows users to create and explore personalized adventures.
+  image: /images/projects/job-gen.png
+  author: 'Iris Liu'
+  publishedAt: '2025-06-08'
+---
+
+- **[Live Web App ->](https://vibe-scribe-frontend.vercel.app/)**
+
+# Vibecoder Job Description Generator
+
+A modern, AI-powered web application that automatically generates professional job descriptions from GitHub repositories. Perfect for freelancers and agencies looking to quickly create compelling project descriptions for platforms like Fiverr and Upwork.
+
+## 🚀 What it does
+
+The Vibecoder Job Description Generator analyzes any public GitHub repository and creates comprehensive, professional job descriptions by:
+
+- **Smart Repository Analysis**: Automatically detects frontend and backend technologies, programming languages, and project structure
+- **AI-Powered Content Generation**: Uses advanced AI to understand project scope and generate tailored job descriptions
+- **Professional Formatting**: Creates descriptions optimized for freelance platforms with proper structure and keywords
+- **Instant Results**: Generate complete job descriptions in seconds, not hours
+
+## 🏗️ Architecture
+
+The application follows a modern React architecture with clean separation of concerns:
+
+```
+src/
+├── components/           # Reusable UI components
+│   ├── ui/              # shadcn/ui components
+│   ├── Header.tsx       # Navigation header
+│   ├── GitHubInput.tsx  # Repository URL input form
+│   ├── JobDescriptionResults.tsx  # Results display
+│   └── LoadingSpinner.tsx        # Loading state
+├── pages/               # Application pages
+│   ├── Index.tsx        # Main application page
+│   └── NotFound.tsx     # 404 error page
+├── hooks/               # Custom React hooks
+├── lib/                 # Utility functions
+└── main.tsx            # Application entry point
+```
+
+### Data Flow
+
+1. **User Input**: User enters GitHub repository URL
+2. **Validation**: Client-side validation ensures valid GitHub URLs
+3. **API Request**: Application sends repository URL to Lyzr AI agent
+4. **AI Processing**: Agent analyzes repository structure, README, and codebase
+5. **Result Display**: Generated job description is displayed with formatting options
+
+## 🛠️ Tech Stack
+
+### Frontend
+- **React 18** - Modern React with hooks and functional components
+- **TypeScript** - Type-safe JavaScript for better development experience
+- **Tailwind CSS** - Utility-first CSS framework for rapid UI development
+- **shadcn/ui** - Beautiful, accessible UI components built on Radix UI
+- **Vite** - Fast build tool and development server
+- **React Router** - Client-side routing
+
+### Backend & AI
+- **Lyzr AI Agent API** - Powered by GPT-4o-mini for intelligent repository analysis
+- **GitHub API Integration** - Direct repository content reading via AI agent tools
+
+### Development Tools
+- **ESLint** - Code linting and quality checks
+- **PostCSS** - CSS processing and optimization
+- **Lucide React** - Beautiful icon library
+
+## ✨ Key Features
+
+### 🎯 Smart Analysis
+- Automatically detects programming languages and frameworks
+- Identifies frontend and backend components
+- Analyzes project complexity and scope
+- Reads repository documentation and structure
+
+### 🎨 Modern UI/UX
+- Responsive design that works on all devices
+- Smooth animations and transitions
+- Professional gradient backgrounds
+- Clean, intuitive interface
+- Real-time validation feedback
+
+### ⚡ Performance
+- Fast repository analysis (typically under 30 seconds)
+- Optimized React rendering with proper state management
+- Efficient API calls with error handling
+- Progressive loading states
+
+### 📝 Professional Output
+- Industry-standard job description format
+- Optimized for freelance platforms
+- Proper technical terminology
+- Clear project scope and requirements
+- Ready-to-copy formatted text
+
+### 🔧 Developer Experience
+- Full TypeScript support
+- Component-based architecture
+- Comprehensive error handling
+- Toast notifications for user feedback
+- Accessible UI components
+
+## 🚀 Getting Started
+
+### Prerequisites
+- Node.js 16+ and npm (install with [nvm](https://github.com/nvm-sh/nvm#installing-and-updating))
+
+### Installation
+
+1. **Clone the repository**
+   ```sh
+   git clone <YOUR_GIT_URL>
+   cd vibecoder-job-generator
+   ```
+
+2. **Install dependencies**
+   ```sh
+   npm install
+   ```
+
+3. **Start development server**
+   ```sh
+   npm run dev
+   ```
+
+4. **Open your browser**
+   Navigate to `http://localhost:5173`
