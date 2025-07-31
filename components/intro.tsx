@@ -46,7 +46,7 @@ export default function Intro() {
         <h1 className='title no-underline'>Welcome to my lab.</h1>{' '}
         {/* add titleto global css */}
         <p className='mt-3 font-light text-muted-foreground'>
-        I&#39;m <span className='font-bold'>Iris Liu</span>, a <span className='font-bold'>founder</span> and <span className='font-bold'>angel investor</span> based in NYC.
+        I&#39;m <span className='font-bold'>Iris Liu</span>, a <span className='font-bold'>technical founder</span> and <span className='font-bold'>angel investor</span> based in NYC.
           Most recently, I've been tinkering with ideas around vibecoding tools and asynchronous agents. I
           made this site to share my thoughts, projects, and
           selected angel investment portfolio. Want to chat? Please reach out to me on social media or send me a message.
