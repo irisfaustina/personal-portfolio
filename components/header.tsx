@@ -13,7 +13,7 @@ export default function Header() {
           Iris Liu
         </Link>
 
-        <ul className='flex items-center gap-2 text-sm font-light text-muted-foreground sm:gap-10'>
+        <ul className='flex items-center gap-1.5 text-sm font-light text-muted-foreground sm:gap-10'>
         <li className='transition-colors hover:text-foreground'>
             <Link href='/posts'>Posts</Link>
           </li>
