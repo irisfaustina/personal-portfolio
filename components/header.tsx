@@ -32,9 +32,8 @@ export default function Header() {
           </svg>
         </button>
 
-
         {/* Desktop nav: visible sm+, hidden below sm */}
-        <ul className="hidden sm:flex items-center gap-6 text-sm font-light text-muted-foreground sm:gap-10 ml-auto">
+        <ul className="hidden sm:flex items-center gap-6 text-sm font-light text-muted-foreground sm:gap-10">
           <li className="transition-colors hover:text-foreground">
             <Link href="/posts">Posts</Link>
           </li>
@@ -56,18 +55,18 @@ export default function Header() {
 
       {/* Mobile dropdown: visible if 'open', hidden on sm+ */}
       {open && (
-        <div className="sm:hidden absolute left-0 right-0 top-full bg-background/95 shadow-lg border-t border-border">
-          <ul className="flex flex-col items-center gap-4 py-4 text-base font-light text-muted-foreground">
-            <li className="w-full text-center transition-colors hover:text-foreground">
+        <div className="sm:hidden absolute right-0 top-full bg-background/95 shadow-lg border-t border-border w-36">
+          <ul className="flex flex-col items-end gap-4 py-4 pr-4 text-base font-light text-muted-foreground">
+            <li className="w-full text-right transition-colors hover:text-foreground">
               <Link href="/posts" onClick={closeMenu}>Posts</Link>
             </li>
-            <li className="w-full text-center transition-colors hover:text-foreground">
+            <li className="w-full text-right transition-colors hover:text-foreground">
               <Link href="/projects" onClick={closeMenu}>Projects</Link>
             </li>
-            <li className="w-full text-center transition-colors hover:text-foreground">
+            <li className="w-full text-right transition-colors hover:text-foreground">
               <Link href="/investments" onClick={closeMenu}>Investments</Link>
             </li>
-            <li className="w-full text-center transition-colors hover:text-foreground">
+            <li className="w-full text-right transition-colors hover:text-foreground">
               <Link href="/contact" onClick={closeMenu}>Contact</Link>
             </li>
           </ul>
