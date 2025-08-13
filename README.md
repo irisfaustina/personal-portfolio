@@ -9,7 +9,7 @@
 
 A modern, responsive personal portfolio website built with Next.js 14 and TypeScript. Features a clean design, dark mode support, blog functionality with MDX, individual pages for content, and contact forms.
 
-[Features](#-features) • [Tech Stack](#️-tech-stack) • [Getting Started](#-getting-started) • [Project Structure](#-project-structure) • [Documentation](#-adding-content)
+[Features](#-features) • [Tech Stack](#️-tech-stack) • [Getting Started](#-getting-started) • [Project Structure](#-project-structure) • [Documentation](#-adding-content) • [Deployment](#-deployment)
 
 </div>
 
@@ -83,6 +83,46 @@ Open [http://localhost:3000](http://localhost:3000) to view the site.
 ```
 
 ## 📝 Adding Content
+
+### Blog Posts
+Add new blog posts in `content/posts/` as MDX files:
+
+```mdx
+---
+title: Your Post Title
+summary: Brief description
+image: /path/to/image.png
+author: Your Name
+publishedAt: '2024-04-21'
+---
+
+Your content here...
+```
+
+## 🚀 Deployment
+
+This project is deployed on Vercel. To deploy your own instance:
+
+1. **Sign up for Vercel**
+   - Go to [Vercel](https://vercel.com)
+   - Sign up or log in to your account
+
+2. **Deploy from GitHub**
+   - Click the "Deploy" button on the repository page
+   - Connect your GitHub account
+   - Select this repository
+   - Click "Deploy"
+
+3. **Environment Variables**
+   - In your Vercel project settings, add the following environment variables:
+     - `RESEND_API_KEY` - Your Resend API key
+
+4. **Custom Domain** (Optional)
+   - Go to your Vercel project settings
+   - Add your custom domain
+   - Follow Vercel's SSL/TLS setup instructions
+
+Your site will be automatically deployed and available at your Vercel URL. Vercel will handle automatic deployments for all future changes pushed to the main branch.
 
 ### Blog Posts
 Add new blog posts in `content/posts/` as MDX files:
