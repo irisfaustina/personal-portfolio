@@ -6,6 +6,8 @@ import Header from '@/components/header'
 import Footer from '@/components/footer'
 import { cn } from '@/lib/utils'
 import { Analytics } from "@vercel/analytics/next"
+import { SpeedInsights } from "@vercel/speed-insights/next"
+
 
 const inter = Inter({
   variable: '--font-inter',
@@ -44,7 +46,8 @@ export default function RootLayout({
           {/* like putting margin top auto on footer, to make space; children is the content of the page */}
           <Footer />
           <Analytics/>
-        </ThemeProvider>
+          <SpeedInsights />
+          </ThemeProvider>
       </body>
     </html>
   )
